@@ -2,7 +2,9 @@ package com.chirikualii.materiapi.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.chirikualii.materiapi.R
 import com.chirikualii.materiapi.data.dummy.DataDummy
 import com.chirikualii.materiapi.data.model.Movie
@@ -18,6 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding :ActivityMainBinding
     private lateinit var adapter: MovieListAdapter
+
+    private val mViewModel : MainViewModel by viewModels(
+        factoryProducer = { MainViewModelFactory() }
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,8 +33,22 @@ class MainActivity : AppCompatActivity() {
         adapter = MovieListAdapter()
         binding.rvMovie.adapter = adapter
 
-        //inset data dummy
-        loadDataFromApi()
+
+       // binding.progersBar.visibility = View.INVISIBLE
+        //binding.progersBar.visibility = View.VISIBLE
+        mViewModel.doGetPopularMovie()
+        observeView()
+    }
+    private fun observeView(){
+
+        mViewModel.listMovie.observe(this){
+            if (it != null){
+                adapter.addItem(it)
+                binding.progersBar.visibility = View.INVISIBLE
+            }else
+                binding.progersBar.visibility = View.VISIBLE
+
+        }
 
 
     }

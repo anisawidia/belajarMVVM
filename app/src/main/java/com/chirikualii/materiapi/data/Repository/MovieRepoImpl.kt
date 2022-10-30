@@ -23,7 +23,6 @@ class MovieRepoImpl(
                     )
                 }
                 Log.d(MovieRepoImpl::class.simpleName, "getPopularMovie : ${Gson().toJsonTree(listData)}", )
-                return emptyList()
                 return listData ?: emptyList()
             } else
                 Log.e(MovieRepoImpl::class.simpleName, "getPopularMovie error code: ${response.code()}", )
